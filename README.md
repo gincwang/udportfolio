@@ -1,6 +1,6 @@
-### Optimizations
+# Optimizations
 
-#index.html
+##index.html
 The original index.html received a PageSpeed score of 27/100 for mobile and 28/100 for desktop out of the repo. Here's the list of items I've tried to help the website run faster. The final score I achieved were 95/100 for mobile and 96/100 for desktop.
 
 * Unblock render-blocking css/js files by either adding async tag to the scripts or inline the css(no additional dl request).
@@ -18,7 +18,7 @@ The original index.html received a PageSpeed score of 27/100 for mobile and 28/1
 
 * considered minifying HTML/css, but didn't see my PageSpeed score increase, so I'd rather leave the file to be more readable.
 
-#pizza.html
+##pizza.html
 The original pizza.html had really slow FPS performance while the site was being scrolled. After fixing most of the janky loops in the main.js and adding some styles to the style.css, the scrolling speed can now consistently go above 60FPS.
 
 * in updatePositions() function, I pulled out the scrollTop variable out of the for loop since it's very taxing on the browser and needs to be calculated only once.
