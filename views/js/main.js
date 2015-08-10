@@ -435,7 +435,7 @@ var resizePizzas = function(size) {
           console.log("bug in sizeSwitcher");
       }
 
-}
+  }
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
@@ -458,8 +458,9 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
+//GIN>> Pulled pizzasDiv out of the for loop...
+var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -492,10 +493,11 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  //I pulled scrolltop element out of the for loop because it only needs to be calculated once
-  var st = document.body.scrollTop;
+  //GIN>>I pulled scrolltop element out of the for loop because it only needs to be calculated once
+  var st = document.body.scrollTop/1250;
+
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((st / 1250) + (i % 5));
+    var phase = Math.sin(st + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -513,15 +515,17 @@ function updatePositions() {
 window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
+//GIN>> Changed from 200 generated moving pizza down to 48... which is about how many I can count in my screen anyway.
+//GIN>> Also changed elem.style.width from 73.33px to 77px to better match the native resolution of the smaller pizza image
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < 48; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
-    elem.src = "images/pizza.png";
+    elem.src = "images/pizza_m.png";
     elem.style.height = "100px";
-    elem.style.width = "73.333px";
+    elem.style.width = "77px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
