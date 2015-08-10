@@ -16,12 +16,13 @@ The original index.html received a PageSpeed score of 27/100 for mobile and 28/1
 3. converted webfont from external href into inlined css style.
 >@font-face{font-family:'Open Sans';src:url(http://fonts.googleapis.com/css?family=Open+Sans:400,700)}
 
+4. considered minifying HTML/css, but didn't see my PageSpeed score increase, so I'd rather leave the file to be more readable.
 
 #pizza.html
 The original pizza.html had really slow FPS performance while the site was being scrolled. After fixing most of the janky loops in the main.js and adding some styles to the style.css, the scrolling speed can now consistently go above 60FPS.
 
 1. in updatePositions() function, I pulled out the scrollTop variable out of the for loop since it's very taxing on the browser and needs to be calculated only once.
-```
+```javascript
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
@@ -36,7 +37,7 @@ function updatePositions() {
   }
 ```
 2. in DOMContentLoaded callback function, I changed the loop from creating 200 pizza down to 48, and also changed the elem.style.width element from 73.33px to 77px to match the smaller pizza_m.png image I created, so the browser won't have to resize these smaller images.
-```
+```javascript
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 ```
 
 3. This doesn't help the 60FPS criteria while scrolling, but it helped reduce the initial setup time for loading all the random pizzas.
-```
+```javascript
 // This for-loop actually creates and appends all of the pizzas when the page loads
 //GIN>> Pulled pizzasDiv out of the for loop...
 var pizzasDiv = document.getElementById("randomPizzas");
@@ -65,7 +66,7 @@ for (var i = 2; i < 100; i++) {
 ```
 
 4. This helps resize the pizza columns by eliminating the amount of FSL that was in the code.
-```
+```javascript
 // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
 function determineDx (size) {
 
@@ -93,7 +94,7 @@ function changePizzaSizes(size) {
 ```
 
 5. I added the following styles to the .mover class elements, so the background pizzas become their own layers, and it helped improve the FPS performance
-```
+```css
 .mover {
   position: fixed;
   width: 256px;
