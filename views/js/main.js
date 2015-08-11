@@ -18,6 +18,8 @@ cameron *at* udacity *dot* com
 
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
+"use strict";
+
 var pizzaIngredients = {};
 pizzaIngredients.meats = [
   "Pepperoni",
@@ -439,9 +441,9 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    var allContainers = document.querySelectorAll(".randomPizzaContainer");
+    var allContainers = document.getElementsByClassName("randomPizzaContainer");
     var dx = determineDx(size);
-    for (var i = 0; i < allContainers.length; i++) {
+    for (var i = 0, len = allContainers.length; i < len; i++) {
       allContainers[i].style.width = dx + '%';
     }
   }
@@ -492,12 +494,13 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('mover');
   //GIN>>I pulled scrolltop element out of the for loop because it only needs to be calculated once
   var st = document.body.scrollTop/1250;
 
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(st + (i % 5));
+  var phase;
+  for (var i = 0, len = items.length; i < len; i++) {
+    phase = Math.sin(st + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -520,15 +523,16 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  var elem;
   for (var i = 0; i < 48; i++) {
-    var elem = document.createElement('img');
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza_m.png";
     elem.style.height = "100px";
     elem.style.width = "77px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
