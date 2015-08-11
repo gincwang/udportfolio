@@ -1,3 +1,5 @@
+This is Project 4 of Udacity's front-end nanodegree. The purpose of this project is to test the student's ability to optimize website performance after taking relevant coursework. 
+
 # Getting started
 
 How to test this website over the internet:
