@@ -1,10 +1,18 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    minCSS = require('gulp-minify-css');
 
-gulp.task('minify', function() {
+gulp.task('minifyJS', function() {
     return gulp.src('views/js/*.js')
         .pipe(rename({suffix: '.min'}))
         .pipe(uglify())
         .pipe(gulp.dest('dist/scripts'))
+});
+
+gulp.task('minifyCSS', function(){
+    return gulp.src('views/css/*.css')
+        .pipe(rename({suffix: '.min'}))
+        .pipe(minCSS())
+        .pipe(gulp.dest('dist/css'))
 });
