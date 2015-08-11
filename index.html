@@ -1,71 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content=" FILL ME IN ">
-    <meta name="author" content=" FILL ME IN ">
-    <title>Cameron Pittman: Portfolio</title>
-
-    <!-- Hmm, what is the impact of web fonts on speed? Measure it... -->
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/print.css" rel="stylesheet">
-
-    <script>
-      (function(w,g){w['GoogleAnalyticsObject']=g;
-      w[g]=w[g]||function(){(w[g].q=w[g].q||[]).push(arguments)};w[g].l=1*new Date();})(window,'ga');
-
-      // TODO: replace with your Google Analytics profile ID.
-      ga('create', 'UA-XXXX-Y');
-      ga('send', 'pageview');
-    </script>
-    <script src="http://www.google-analytics.com/analytics.js"></script>
-    <script async src="js/perfmatters.js"></script>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Udportfolio by gincwang</title>
   </head>
 
   <body>
-    <header>
-      <a href="/"><img src="img/profilepic.jpg"></a>
-      <p>Cameron Pittman<br><span>Course Developer</span></p>
-    </header>
+    <div id="container">
+      <div class="inner">
 
-    <div class="container">
-      <div class="hero">
-        <strong>I love web development!</strong> This is a template for a simple portfolio. I decided to use it to showcase a few Udacity courses I've taken and some teaching work, but you can use it to showcase any kind of project that you want the world to see :) <br> Contact me: me@email.com
+        <header>
+          <h1>Udportfolio</h1>
+          <h2></h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/gincwang/udportfolio/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/gincwang/udportfolio/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/gincwang/udportfolio" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="optimizations" class="anchor" href="#optimizations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optimizations</h1>
+
+<h2>
+<a id="indexhtml" class="anchor" href="#indexhtml" aria-hidden="true"><span class="octicon octicon-link"></span></a>index.html</h2>
+
+<p>The original index.html received a PageSpeed score of 27/100 for mobile and 28/100 for desktop out of the repo. Here's the list of items I've tried to help the website run faster. The final score I achieved were 95/100 for mobile and 96/100 for desktop.</p>
+
+<ul>
+<li>
+<p>Unblock render-blocking css/js files by either adding async tag to the scripts or inline the css(no additional dl request).</p>
+
+<blockquote>
+<p>Add async to the <a href="http://www.google-analytics.com/analytics.js">http://www.google-analytics.com/analytics.js</a> script
+Inline the style.css so it's not render blocking, left the media query inside the file (non-blocking)
+Add media query to print.css</p>
+</blockquote>
+</li>
+<li>
+<p>Resized and compressed Pizzeria.jpg and profilepic.jpg.</p>
+
+<blockquote>
+<p>Resized pixel dimension of Pizzeria.jpg from 2048x1536 to 360x270(file size went from 2.4MB to 115kB), then further compressed it into webp, lowering file size from 115kB to 75kB.
+compressed profilepic.jpg to profilepic.webp, filesize went down from 14kB to 4kB.</p>
+</blockquote>
+</li>
+<li>
+<p>converted webfont from external href into inlined css style.</p>
+
+<blockquote>
+<p><a href="https://github.com/font-face" class="user-mention">@font-face</a>{font-family:'Open Sans';src:url(<a href="http://fonts.googleapis.com/css?family=Open+Sans:400,700">http://fonts.googleapis.com/css?family=Open+Sans:400,700</a>)}</p>
+</blockquote>
+</li>
+<li><p>considered minifying HTML/css, but didn't see my PageSpeed score increase, so I'd rather leave the file to be more readable.</p></li>
+</ul>
+
+<h2>
+<a id="pizzahtml" class="anchor" href="#pizzahtml" aria-hidden="true"><span class="octicon octicon-link"></span></a>pizza.html</h2>
+
+<p>The original pizza.html had really slow FPS performance while the site was being scrolled. After fixing most of the janky loops in the main.js and adding some styles to the style.css, the scrolling speed can now consistently go above 60FPS.</p>
+
+<ul>
+<li>in updatePositions() function, I pulled out the scrollTop variable out of the for loop since it's very taxing on the browser and needs to be calculated only once.</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">function</span> <span class="pl-en">updatePositions</span>() {
+  frame<span class="pl-k">++</span>;
+  <span class="pl-c1">window</span>.performance.mark(<span class="pl-s"><span class="pl-pds">"</span>mark_start_frame<span class="pl-pds">"</span></span>);
+
+  <span class="pl-k">var</span> items <span class="pl-k">=</span> <span class="pl-c1">document</span>.querySelectorAll(<span class="pl-s"><span class="pl-pds">'</span>.mover<span class="pl-pds">'</span></span>);
+  <span class="pl-c">//GIN&gt;&gt;I pulled scrolltop element out of the for loop because it only needs to be calculated once</span>
+  <span class="pl-k">var</span> st <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">body</span>.scrollTop/<span class="pl-c1">1250</span>;
+
+  <span class="pl-k">for</span> (<span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> items.<span class="pl-c1">length</span>; i<span class="pl-k">++</span>) {
+    <span class="pl-k">var</span> phase <span class="pl-k">=</span> <span class="pl-c1">Math</span>.<span class="pl-c1">sin</span>(st <span class="pl-k">+</span> (i <span class="pl-k">%</span> <span class="pl-c1">5</span>));
+    items[i].<span class="pl-c1">style</span>.<span class="pl-c1">left</span> <span class="pl-k">=</span> items[i].basicLeft <span class="pl-k">+</span> <span class="pl-c1">100</span> <span class="pl-k">*</span> phase <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>px<span class="pl-pds">'</span></span>;
+  }</pre></div>
+
+<ul>
+<li>in DOMContentLoaded callback function, I changed the loop from creating 200 pizza down to 48, and also changed the elem.style.width element from 73.33px to 77px to match the smaller pizza_m.png image I created, so the browser won't have to resize these smaller images.</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c1">document</span>.addEventListener(<span class="pl-s"><span class="pl-pds">'</span>DOMContentLoaded<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>() {
+  <span class="pl-k">var</span> cols <span class="pl-k">=</span> <span class="pl-c1">8</span>;
+  <span class="pl-k">var</span> s <span class="pl-k">=</span> <span class="pl-c1">256</span>;
+  <span class="pl-k">for</span> (<span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> <span class="pl-c1">48</span>; i<span class="pl-k">++</span>) {    <span class="pl-c">//used to be 200</span>
+    <span class="pl-k">var</span> elem <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>img<span class="pl-pds">'</span></span>);
+    elem.<span class="pl-c1">className</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>mover<span class="pl-pds">'</span></span>;
+    elem.src <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>images/pizza_m.png<span class="pl-pds">"</span></span>;
+    elem.<span class="pl-c1">style</span>.<span class="pl-c1">height</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>100px<span class="pl-pds">"</span></span>;
+    elem.<span class="pl-c1">style</span>.<span class="pl-c1">width</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>77px<span class="pl-pds">"</span></span>;
+    elem.basicLeft <span class="pl-k">=</span> (i <span class="pl-k">%</span> cols) <span class="pl-k">*</span> s;
+    elem.<span class="pl-c1">style</span>.<span class="pl-c1">top</span> <span class="pl-k">=</span> (<span class="pl-c1">Math</span>.<span class="pl-c1">floor</span>(i / cols) <span class="pl-k">*</span> s) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>px<span class="pl-pds">'</span></span>;
+    <span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">"</span>#movingPizzas1<span class="pl-pds">"</span></span>).<span class="pl-c1">appendChild</span>(elem);
+  }
+  updatePositions();
+});</pre></div>
+
+<ul>
+<li>This doesn't help the 60FPS criteria while scrolling, but it helped reduce the initial setup time for loading all the random pizzas.</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c">// This for-loop actually creates and appends all of the pizzas when the page loads</span>
+<span class="pl-c">//GIN&gt;&gt; Pulled pizzasDiv out of the for loop...</span>
+<span class="pl-k">var</span> pizzasDiv <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">"</span>randomPizzas<span class="pl-pds">"</span></span>);
+<span class="pl-k">for</span> (<span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">2</span>; i <span class="pl-k">&lt;</span> <span class="pl-c1">100</span>; i<span class="pl-k">++</span>) {
+  pizzasDiv.<span class="pl-c1">appendChild</span>(pizzaElementGenerator(i));
+}</pre></div>
+
+<ul>
+<li>This helps resize the pizza columns by eliminating the amount of FSL that was in the code.</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c">// Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).</span>
+<span class="pl-k">function</span> <span class="pl-en">determineDx</span> (<span class="pl-smi">size</span>) {
+
+    <span class="pl-k">switch</span>(size) {
+      <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span><span class="pl-k">:</span>
+        <span class="pl-k">return</span> <span class="pl-c1">25</span>;
+      <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span><span class="pl-k">:</span>
+        <span class="pl-k">return</span> <span class="pl-c1">33.3</span>;
+      <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span><span class="pl-k">:</span>
+        <span class="pl-k">return</span> <span class="pl-c1">50</span>;
+      <span class="pl-k">default</span><span class="pl-k">:</span>
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">"</span>bug in sizeSwitcher<span class="pl-pds">"</span></span>);
+    }
+
+}
+
+<span class="pl-c">// Iterates through pizza elements on the page and changes their widths</span>
+<span class="pl-k">function</span> <span class="pl-en">changePizzaSizes</span>(<span class="pl-smi">size</span>) {
+  <span class="pl-k">var</span> allContainers <span class="pl-k">=</span> <span class="pl-c1">document</span>.querySelectorAll(<span class="pl-s"><span class="pl-pds">"</span>.randomPizzaContainer<span class="pl-pds">"</span></span>);
+  <span class="pl-k">var</span> dx <span class="pl-k">=</span> determineDx(size);
+  <span class="pl-k">for</span> (<span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> allContainers.<span class="pl-c1">length</span>; i<span class="pl-k">++</span>) {
+    allContainers[i].<span class="pl-c1">style</span>.<span class="pl-c1">width</span> <span class="pl-k">=</span> dx <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>%<span class="pl-pds">'</span></span>;
+  }
+}</pre></div>
+
+<ul>
+<li>I added the following styles to the .mover class elements, so the background pizzas become their own layers, and it helped improve the FPS performance</li>
+</ul>
+
+<div class="highlight highlight-css"><pre><span class="pl-e">.mover</span> {
+  <span class="pl-c1"><span class="pl-c1">position</span></span>: <span class="pl-c1">fixed</span>;
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">256<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">z-index</span></span>: <span class="pl-c1">-1</span>;
+  <span class="pl-c1"><span class="pl-c1">transform</span></span>: translateZ(<span class="pl-c1">0</span>);
+  <span class="pl-c1">will-change</span>: transform;
+}</pre></div>
+        </section>
+
+        <footer>
+          Udportfolio is maintained by <a href="https://github.com/gincwang">gincwang</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
       </div>
-
-      <div class="content">
-        <ul>
-          <li>
-            <img src="https://lh4.ggpht.com/kJEnfqhPvtm4m3EneSZ4fWYGS8lW4YNhEjk6zPkyrQaBUHc-2Y_ElDic99NHI0h-UBLXVbRCjFybFvrWxdk=s100">
-            <a href="project-2048.html">Build Your Own 2048!</a>
-            <p>I made my own version of 2048. How cool is that!?</p>
-          </li>
-
-          <li>
-            <img src="https://lh6.ggpht.com/f_0W8h__3G99CWTjnMjD8BUKm7yp2-wJyApLtTwFoFtlal2ULf_JgHIsOQq2NiYfKOdMlXlMHDKNo5XVZLs=s100">
-            <a href="project-webperf.html">Website Performance Optimization</a>
-            <p>Hey... this class looks familiar.</p>
-          </li>
-
-          <li>
-            <img src="https://lh5.ggpht.com/IKdCmTWn8a2nMhlwMYzryvzRN5CUZAOBr4tDrEAbszV7TIFe9pRAInA4kkYcgTXwrifJsBEsq1agTueuu-g=s100">
-            <a href="project-mobile.html">Mobile Web Development</a>
-            <p>Making mobile apps isn't so hard after all.</p>
-          </li>
-
-          <li>
-            <img style="width: 100px;" src="views/images/pizzeria.jpg">
-            <a href="views/pizza.html">Cam's Pizzeria</a>
-            <p>Who wants a performant pizza?</p>
-          </li>
-        </ul>
     </div>
-
-    <footer>
-      <p>&copy; Web Performance 2014 <span id="crp-stats"></span></p>
-    </footer>
   </body>
 </html>
